@@ -1,0 +1,6 @@
+* eca-config
+
+** MCP-server
+*** python-repl
+
+In order to use the MCP server you must clone the git-repo =git clone https://github.com/hdresearch/mcp-python= and then check the pathes in =config.json=
