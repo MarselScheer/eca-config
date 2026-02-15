@@ -22,9 +22,9 @@
             "command": "uv",
             "args": [
                 "--directory",
-                "/home/ide/kg/mcp-servers/mcp-python",
+                "/home/m/docker_fs/mcp-servers/mcp-pyrepl",
                 "run",
-                "src/mcp_python/server.py"
+                "src/main.py"
             ]
         }
     },
