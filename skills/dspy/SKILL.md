@@ -20,10 +20,14 @@ Use this skill to transition from "prompt engineering" to "programming" with Lan
         answer: str = dspy.OutputField()
     ```
 
-    For complex types (nested structures, validation, or complex objects), define a dedicated Pydantic model:
+    For lists of structured objects, **always use a Pydantic model** — never `list[dict]`:
 
     ```python
-    # ✅ Good: Use Pydantic for complex types in signatures
+    # ❌ Bad: list[dict] provides no validation
+    class BadSignature(dspy.Signature):
+        citations: list[dict] = dspy.OutputField()  # Never do this!
+
+    # ✅ Good: Use Pydantic for list of objects
     from pydantic import BaseModel
 
     class Citation(BaseModel):
@@ -70,10 +74,14 @@ Use this skill to transition from "prompt engineering" to "programming" with Lan
       answer: str = dspy.OutputField()
   ```
 
-- **Use Pydantic for Complex Types**: If Python's standard types aren't sufficient (e.g., for nested structures, validation, or complex objects), define a dedicated `pydantic.BaseModel` and use it in your signature:
+- **Use Pydantic for Lists of Objects (Never `list[dict]`!)**: When you need a list of structured objects, always define a Pydantic model. **Never use `list[dict]`** — it provides no validation, unclear schema, and poor IDE support.
 
   ```python
-  # ✅ Good: Use Pydantic for complex/validated types
+  # ❌ Bad: list[dict] provides no validation or structure
+  class BadExample(dspy.Signature):
+      citations: list[dict] = dspy.OutputField()  # Avoid this!
+
+  # ✅ Good: Use a Pydantic model for lists of objects
   from pydantic import BaseModel
 
   class Citation(BaseModel):
@@ -81,17 +89,25 @@ Use this skill to transition from "prompt engineering" to "programming" with Lan
       source: str
       page: int
 
-  class ResearchAnswer(dspy.Signature):
+  class GoodExample(dspy.Signature):
       """Answer with citations from the provided sources."""
       context: list[str] = dspy.InputField()
       question: str = dspy.InputField()
-      citations: list[Citation] = dspy.OutputField()
+      citations: list[Citation] = dspy.OutputField()  # Much better!
   ```
 
-  This approach provides:
-  - Automatic validation of LLM outputs
-  - Clear schema definition for complex data
-  - Better error handling and parsing
+  **Why avoid `list[dict]`?**
+  - No automatic validation — malformed data causes runtime errors
+  - Unclear schema — collaborators must infer field names/types from usage
+  - Poor IDE support — no autocomplete, no type checking
+  - Brittle parsing — field name typos slip through silently
+
+  **When to use what:**
+  | Type | Use Case |
+  |------|----------|
+  | `list[str]` | Simple primitives (strings, numbers) |
+  | `list[SomeModel]` | Lists of structured objects (always prefer this!) |
+  | `list[dict]` | **Never** — always define a Pydantic model instead |
 
 ## Common Patterns
 
