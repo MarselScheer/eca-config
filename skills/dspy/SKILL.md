@@ -10,13 +10,14 @@ Use this skill to transition from "prompt engineering" to "programming" with Lan
 
 ## Core Workflow
 
-1.  **Define Signatures**: Specify the input and output fields.
+1.  **Define Signatures**: Specify the input and output fields with type hints.
     ```python
+    # ✅ Good: Always use type hints in signatures
     class RAG(dspy.Signature):
         """Answer questions with given context."""
-        context = dspy.InputField()
-        question = dspy.InputField()
-        answer = dspy.OutputField()
+        context: list[str] = dspy.InputField()
+        question: str = dspy.InputField()
+        answer: str = dspy.OutputField()
     ```
 2.  **Select Modules**: Use `dspy.Predict`, `dspy.ChainOfThought`, or `dspy.ReAct`.
 3.  **Build the Program**: Inherit from `dspy.Module` and define `__init__` and `forward`.
@@ -35,6 +36,43 @@ Use this skill to transition from "prompt engineering" to "programming" with Lan
 - **Small Signatures**: Keep signatures focused. Use multiple modules for complex tasks.
 - **Metrics Matter**: Always define a clear metric (e.g., `exact_match` or `semantic_similarity`) before optimizing.
 - **Data-Driven**: Provide at least 10-20 examples for `BootstrapFewShot` to be effective.
+- **Always Use Type Hints**: Always define type hints for all input and output fields in your `dspy.Signature`. This improves:
+  - **Type safety**: Catches errors early at runtime
+  - **Documentation**: Makes the signature self-documenting
+  - **DSPy optimization**: Helps the compiler generate better prompts
+  - **IDE support**: Enables better autocomplete and refactoring
+
+  ```python
+  # ✅ Good: Always use type hints
+  class RAG(dspy.Signature):
+      """Answer questions with given context."""
+      context: list[str] = dspy.InputField()
+      question: str = dspy.InputField()
+      answer: str = dspy.OutputField()
+  ```
+
+- **Use Pydantic for Complex Types**: If Python's standard types aren't sufficient (e.g., for nested structures, validation, or complex objects), define a dedicated `pydantic.BaseModel` and use it in your signature:
+
+  ```python
+  # ✅ Good: Use Pydantic for complex/validated types
+  from pydantic import BaseModel
+
+  class Citation(BaseModel):
+      text: str
+      source: str
+      page: int
+
+  class ResearchAnswer(dspy.Signature):
+      """Answer with citations from the provided sources."""
+      context: list[str] = dspy.InputField()
+      question: str = dspy.InputField()
+      citations: list[Citation] = dspy.OutputField()
+  ```
+
+  This approach provides:
+  - Automatic validation of LLM outputs
+  - Clear schema definition for complex data
+  - Better error handling and parsing
 
 ## Common Patterns
 
@@ -45,7 +83,7 @@ class SimpleRAG(dspy.Module):
         super().__init__()
         self.retrieve = dspy.Retrieve(k=num_passages)
         self.generate_answer = dspy.ChainOfThought(RAG)
-    
+
     def forward(self, question):
         context = self.retrieve(question).passages
         return self.generate_answer(context=context, question=question)
