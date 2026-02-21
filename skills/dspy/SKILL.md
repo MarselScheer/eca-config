@@ -19,6 +19,25 @@ Use this skill to transition from "prompt engineering" to "programming" with Lan
         question: str = dspy.InputField()
         answer: str = dspy.OutputField()
     ```
+
+    For complex types (nested structures, validation, or complex objects), define a dedicated Pydantic model:
+
+    ```python
+    # ✅ Good: Use Pydantic for complex types in signatures
+    from pydantic import BaseModel
+
+    class Citation(BaseModel):
+        text: str
+        source: str
+        page: int
+
+    class ResearchAnswer(dspy.Signature):
+        """Answer with citations from the provided sources."""
+        context: list[str] = dspy.InputField()
+        question: str = dspy.InputField()
+        citations: list[Citation] = dspy.OutputField()
+    ```
+
 2.  **Select Modules**: Use `dspy.Predict`, `dspy.ChainOfThought`, or `dspy.ReAct`.
 3.  **Build the Program**: Inherit from `dspy.Module` and define `__init__` and `forward`.
 4.  **Optimize**: Use `dspy.MIPROv2` or `BootstrapFewShot` to tune the program based on data.
