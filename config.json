@@ -17,16 +17,24 @@
 	    }
 	}
     },
+    "toolCall": {
+	"approval": {
+	    "byDefault": "ask",
+	    "allow": {
+		"shell_command": {"argsMatchers": {"command": ["make test"]}}
+	    }
+	}
+    },
     "mcpServers": {
-        "python-repl": {
-            "command": "uv",
-            "args": [
-                "--directory",
-                "/home/m/docker_fs/mcp-servers/mcp-pyrepl",
-                "run",
-                "src/main.py"
-            ]
-        }
+	"python-repl": {
+	    "command": "uv",
+	    "args": [
+		"--directory",
+		"/home/m/docker_fs/mcp-servers/mcp-pyrepl",
+		"run",
+		"src/main.py"
+	    ]
+	}
     },
     "customTools": {
 	"web-search": {
