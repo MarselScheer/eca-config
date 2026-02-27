@@ -1,0 +1,71 @@
+{
+    "defaultModel" : "openrouter/minimax/minimax-m2.5",
+    "providers" : {
+	"openrouter" : {
+	    "api" : "openai-chat",
+	    "url" : "https://openrouter.ai/api/v1",
+	    "key" : "${env:OPENROUTER_API_KEY}",
+	    "models" : {
+		"mistralai/mistral-small-3.2-24b-instruct" : { },
+		"openai/gpt-oss-120b" : { },
+		"deepseek/deepseek-v3.2" : { },
+		"anthropic/claude-3.5-sonnet" : { },
+		"minimax/minimax-m2.1" : { },
+		"minimax/minimax-m2.5" : { },
+		"openai/gpt-4-turbo" : { },
+		"meta-llama/llama-3.1-405b" : { }
+	    }
+	}
+    },
+    "toolCall": {
+	"approval": {
+	    "byDefault": "ask",
+	    "allow": {
+		"shell_command": {"argsMatchers": {"command": ["make test"]}}
+	    }
+	}
+    },
+    "mcpServers": {
+	"python-repl": {
+	    "command": "uv",
+	    "args": [
+		"--directory",
+		"/home/m/docker_fs/mcp-servers/mcp-pyrepl",
+		"run",
+		"src/main.py"
+	    ]
+	}
+    },
+    "customTools": {
+	"web-search": {
+	    "description": "Fetches the content of a URL and returns it in Markdown format.",
+	    "command": "trafilatura --output-format=markdown -u {{url}}",
+	    "schema": {
+		"properties": {
+		    "url": {
+			"type": "string",
+			"description": "The URL to fetch content from."
+		    }
+		},
+		"required": ["url"]
+	    }
+	},
+	"file-search": {
+	    "description": "${file:tools/my-tool.md}",
+	    "command": "find {{directory}} -name {{pattern}}",
+	    "schema": {
+		"properties": {
+		    "directory": {
+			"type": "string",
+			"description": "The directory to start the search from."
+		    },
+		    "pattern": {
+			"type": "string",
+			"description": "The search pattern for the filename (e.g., '*.clj')."
+		    }
+		},
+		"required": ["directory", "pattern"]
+	    }
+	}
+    }
+}
