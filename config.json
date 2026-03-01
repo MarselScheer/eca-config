@@ -1,5 +1,11 @@
 {
-    "defaultModel" : "openrouter/minimax/minimax-m2.5",
+    "defaultModel" : "openrouter/google/gemini-3-flash-preview",
+    "defaultAgent" : "plan",
+    "agent": {
+	"code": {
+	    "defaultModel" : "openrouter/minimax/minimax-m2.5"
+	}
+    },
     "providers" : {
 	"openrouter" : {
 	    "api" : "openai-chat",
@@ -40,15 +46,6 @@
 	    "headers": {
 		"CONTEXT7_API_KEY": "${env:CONTEXT7_API_KEY}"
 	    }
-	},
-	"shortcomings": {
-	    "command": "uv",
-	    "args": [
-		"--directory",
-		"/home/m/docker_fs/mcp-servers/mcp-shortcomings",
-		"run",
-		"src/mcp_server.py"
-	    ]
 	}
     },
     "customTools": {
