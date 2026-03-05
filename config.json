@@ -49,6 +49,19 @@
 	}
     },
     "customTools": {
+	"list-all-shortcomings": {
+	    "description": "Tool list all shortcomings",
+	    "command": "cd {{directory}} && shortcomings list-shortcomings",
+	    "schema": {
+		"properties": {
+		    "directory": {
+			"type": "string",
+			"description": "The directory to start the search from."
+		    }
+		},
+		"required": ["directory"]
+	    }
+	},
 	"web-search": {
 	    "description": "Fetches the content of a URL and returns it in Markdown format.",
 	    "command": "trafilatura --output-format=markdown -u {{url}}",
@@ -63,7 +76,6 @@
 	    }
 	},
 	"file-search": {
-	    "description": "${file:tools/my-tool.md}",
 	    "command": "find {{directory}} -name {{pattern}}",
 	    "schema": {
 		"properties": {
