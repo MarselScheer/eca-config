@@ -21,6 +21,13 @@
 		"openai/gpt-4-turbo" : { },
 		"meta-llama/llama-3.1-405b" : { }
 	    }
+	},
+	"ollama" : {
+	    "api" : "openai-chat",
+	    "url" : "${env:OLLAMA_HOST}",
+	    "models" : {
+		"gemma4:cloud256ctx" : { }
+	    }
 	}
     },
     "toolCall": {
