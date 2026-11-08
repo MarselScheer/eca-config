@@ -1,27 +1,28 @@
 {
-    "defaultModel" : "openrouter/deepseek/deepseek-v4-pro",
-    "defaultAgent" : "plan",
+    "defaultModel" : "deepseek/deepseek-flash",
+    "defaultAgent" : "code",
     "agent": {
 	"code": {
-	    "defaultModel" : "openrouter/deepseek/deepseek-v4-flash"
+	    "defaultModel" : "deepseek/deepseek-flash"
 	}
     },
     "providers" : {
+	"deepseek" : {
+	    "api" : "openai-chat",
+	    "url" : "https://api.deepseek.com",
+	    "key" : "${env:DEEPSEEK_API_KEY}",
+	    "models" : {
+		"deepseek-v4-pro": { },
+		"deepseek-flash": { }
+	    }
+	},
 	"openrouter" : {
 	    "api" : "openai-chat",
 	    "url" : "https://openrouter.ai/api/v1",
 	    "key" : "${env:OPENROUTER_API_KEY}",
 	    "models" : {
 		"deepseek/deepseek-v4-pro": { },
-		"deepseek/deepseek-v4-flash": { },
-		"mistralai/mistral-small-3.2-24b-instruct" : { },
-		"openai/gpt-oss-120b" : { },
-		"deepseek/deepseek-v3.2" : { },
-		"anthropic/claude-3.5-sonnet" : { },
-		"minimax/minimax-m2.1" : { },
-		"minimax/minimax-m2.5" : { },
-		"openai/gpt-4-turbo" : { },
-		"meta-llama/llama-3.1-405b" : { }
+		"deepseek/deepseek-v4-flash": { }
 	    }
 	},
 	"ollama" : {
@@ -45,7 +46,7 @@
 	    "command": "uv",
 	    "args": [
 		"--directory",
-		"/home/m/docker_fs/mcp-servers/mcp-pyrepl",
+		"/home/m/docker_fs/repos/mcp-sandbox-pyrepl",
 		"run",
 		"src/main.py"
 	    ]
